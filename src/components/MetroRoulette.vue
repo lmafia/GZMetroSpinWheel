@@ -186,6 +186,7 @@ const spinWheel = (): void => {
       isAnimating.value = false;
       if (targetItem) {
         emit('spin-complete', targetItem);
+       
       }
       
     }
@@ -217,11 +218,11 @@ onUnmounted(() => {
       
       <!-- Text and indicators -->
       <div 
-        v-for="(item, index) in props.items" 
+        v-for="(__, index) in props.items" 
         :key="`slice-${index}`"
         class="slice-container"
         :style="getSliceContainerStyle(index) as Record<string, string | number>"
-      >
+      
 
       </div>
       

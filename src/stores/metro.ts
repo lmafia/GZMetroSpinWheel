@@ -58,7 +58,7 @@ export const useMetroStore = defineStore('metro', () => {
   // Load metro data from JSON file
   const loadMetroData = async () => {
     try {
-      const response = await fetch('/data/guangzhou_metro_converted.json');
+      const response =await fetch(`${import.meta.env.BASE_URL}data/guangzhou_metro_converted.json`);
       const lines = await response.json();
       
       if (!Array.isArray(lines)) {
