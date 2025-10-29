@@ -2,12 +2,7 @@
 import { onMounted, ref, computed } from 'vue';
 import { useMetroStore } from './stores/metro';
 import MetroRoulette from './components/MetroRoulette.vue';
-import { createPinia } from 'pinia';
-import { createApp } from 'vue';
-import App from './App.vue'
-const pinia = createPinia()
-const app = createApp(App)
-app.use(pinia)
+
 const metroStore = useMetroStore();
 const isInitialized = ref(false);
 
@@ -134,7 +129,9 @@ const selectedItem = computed(() => {
       <!-- Roulette Area -->
       <div v-else class="roulette-interface">
         <div class="mode-indicator">
-          <span v-if="metroStore.mode === 'single'"></span>
+          <span v-if="metroStore.mode === 'single'">
+            单级模式
+          </span>
           <span v-else>
             {{ metroStore.selectedLine ? `已选择: ${metroStore.selectedLine.name}` : '请选择地铁线路' }}
           </span>
@@ -203,11 +200,9 @@ const selectedItem = computed(() => {
   --success-color: #4caf50;
   --warning-color: #fb8c00;
 }
-
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+html {
+  height: 100%;
+  overflow: hidden;
 }
 
 body {
@@ -215,20 +210,19 @@ body {
   line-height: 1.6;
   color: #333;
   background-color: #f5f5f5;
+
 }
 
 .app {
-  max-width: 800px;
+
   margin: 0 auto;
   padding: 20px;
-  min-height: 100vh;
   display: flex;
   flex-direction: column;
 }
 
 .app-header {
   text-align: center;
-  margin-bottom: 2rem;
   padding: 1rem;
   background: white;
   border-radius: 8px;
@@ -237,7 +231,7 @@ body {
 
 .app-header h1 {
   color: var(--primary-color);
-  font-size: 1.8rem;
+  font-size: 1.5rem;
 }
 
 .app-content {
@@ -246,10 +240,10 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  padding: 2rem 0;
-  gap: 2.5rem;
+  padding: 1rem 0;
+  gap: 2rem;
   width: 100%;
-  margin: 0 auto;
+  /* margin: 0 auto; */
 }
 
 .mode-selection {
@@ -274,7 +268,7 @@ body {
   color: #333;
   background-color: white;
   border: 2px solid var(--primary-color);
-  border-radius: 10px;
+  border-radius: 8px;
   cursor: pointer;
   transition: all 0.3s ease;
   display: flex;
@@ -317,7 +311,7 @@ body {
 .loading-state {
   text-align: center;
   padding: 2rem;
-
+}
 .loading-state .spinner {
   width: 40px;
   height: 40px;
@@ -335,22 +329,23 @@ body {
 
 .roulette-interface {
   text-align: center;
-  padding: 1rem;
+  flex:1;
+  display: flex;
+  flex-direction:column;
+  gap: 1rem;
 }
 
 .mode-indicator {
-  margin-bottom: 1.5rem;
   font-size: 1.2rem;
   font-weight: 500;
   color: var(--primary-color);
-  background: rgba(25, 118, 210, 0.1);
+  background: #ffffff;
   padding: 0.5rem 1rem;
-  border-radius: 20px;
+  border-radius: 16px;
   display: inline-block;
 }
 
 .roulette-wrapper {
-  margin: 2rem auto;
   position: relative;
   width: auto;
   height: auto;
@@ -414,26 +409,22 @@ body {
 
 .action-buttons {
   display: flex;
-  flex-direction: row;
-  gap: 4rem;
+  gap: 1rem;
   justify-content: center;
-  margin-top: 2rem;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
 }
 
 .spin-button,
 .reset-button {
   display: flex;
-  padding: 1rem 2rem;
   font-size: 1rem;
   font-weight: 500;
   border: none;
-  border-radius: 25px;
+  border-radius: 8px;
   cursor: pointer;
   transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
-  /* min-width: 150px; */
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   
   &:disabled {
@@ -441,6 +432,20 @@ body {
     cursor: not-allowed;
   }
   
+  &:hover:not(:disabled) {
+    background-color: #f0f0f0;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  &:active:not(:disabled) {
+    transform: translateY(0);
+  }
+  
+  &.spinning {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
   .spinner {
     display: inline-block;
     width: 16px;
@@ -454,44 +459,8 @@ body {
   }
 }
 
-.spin-button {
-  background: linear-gradient(135deg, var(--primary-color), #0d47a1);
-  color: white;
-  
-  &:hover:not(:disabled) {
-    background: linear-gradient(135deg, #1565c0, #0a3a7a);
-    transform: translateY(-2px);
-    box-shadow: 0 6px 12px rgba(25, 118, 210, 0.3);
-  }
-  
-  &:active:not(:disabled) {
-    transform: translateY(0);
-  }
-  
-  &.spinning {
-    padding-left: 1.5rem;
-    padding-right: 1.5rem;
-  }
-}
-
-.reset-button {
-  background-color: white;
-  color: #666;
-  border: 1px solid #ddd;
-  
-  &:hover:not(:disabled) {
-    background-color: #f0f0f0;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  }
-  
-  &:active:not(:disabled) {
-    transform: translateY(0);
-  }
-}
 
 .result-display {
-  margin-top: 2rem;
   padding: 1.5rem;
   background: white;
   border-radius: 10px;
@@ -523,5 +492,5 @@ body {
   }
 }
 
-}
+
 </style>
